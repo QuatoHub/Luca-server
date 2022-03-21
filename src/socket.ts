@@ -1,6 +1,6 @@
 import * as http from "http";
 import { Server, Socket } from "socket.io";
-// import socketCanvas from "./controllers/canvas";
+import { socketCanvas } from "./controllers/canvas";
 import app from "./index";
 
 const server = http.createServer(app);
@@ -20,7 +20,7 @@ try {
         console.log("SOCKETIO disconnect EVENT: ", socket.id, " client disconnect");
     });
 
-    // socketCanvas(socket);
+    socketCanvas(socket);
     });
 } catch (err) {
     console.log(err);

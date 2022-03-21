@@ -1,8 +1,7 @@
-const { cards } = require("../models");
+import { Cards } from "../models/cards";
 
-module.exports = {
-    create: async (userId, content, color, projectId) => {
-        const result = await cards.create(
+export const create = async (userId: number, content: string, color: string, projectId: number) => {
+        const result = await Cards.create(
             {
                 userId: userId,
                 projectId: projectId,
@@ -12,10 +11,10 @@ module.exports = {
                 color: color
             });
         return result;
-    },
+    }
 
-    get: async (projectId) => {
-        const cardInfo = await cards.findAll({
+export const get = async (projectId: number) => {
+        const cardInfo = await Cards.findAll({
             where: {
                 projectId,
                 storage: "card"
@@ -24,9 +23,8 @@ module.exports = {
             raw: true
         });
         return cardInfo;
-    },
+    }
 
-    delete: async (cardId) => {
-        await cards.destroy({ where: { id: cardId } });
-    },
-};
+export const remove = async (cardId: number) => {
+        await Cards.destroy({ where: { id: cardId } });
+    }

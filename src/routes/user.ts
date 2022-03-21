@@ -1,22 +1,17 @@
-// const router = require("express").Router();
 import * as express from "express";
-import { Request, Response } from "express";
-import { guest, logout, signup, checkAndMail, login} from "../controllers/user";
+import * as controller from "../controllers/user";
+import { kakaoLogin } from "../controllers/kakao";
+import { googleLogin } from "../controllers/google";
+import { naverLogin } from "../controllers/naver";
 const router = express.Router();
-const googleController = require("../controllers/google")
-const kakaoController = require("../controllers/kakao")
-const naverController = require("../controllers/naver")
 
-router.get("/guest", guest);
-router.get("/logout", logout);
-router.post("/signup", signup);
-router.post("/checkAndMail", checkAndMail);
-router.post("/login", login);
-router.post("/kakao", kakaoController.login);
-router.post("/google", googleController.login);
-router.post("/naver", naverController.login);
-router.get("/", (req: Request, res: Response) => {
-    res.send("user get")
-})
+router.get("/guest", controller.guest);
+router.get("/logout", controller.logout);
+router.post("/signup", controller.signup);
+router.post("/checkAndMail", controller.checkAndMail);
+router.post("/login", controller.login);
+router.post("/kakao", kakaoLogin);
+router.post("/google", googleLogin);
+router.post("/naver", naverLogin);
 
 export default router;

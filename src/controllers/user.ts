@@ -29,7 +29,7 @@ export const guest = async (req :Request, res: Response) => {
       where: { email: `Guest${count + 1}@guest.com` },
     });
 
-    const accessToken = generateAccessToken(userInfo);    
+    const accessToken = generateAccessToken(userInfo.get({ plain: true}));    
     sendAccessToken(res, accessToken, 200, {
       data: { isGuest: true },
       message: "Login success",
@@ -77,9 +77,7 @@ export const signup = async (req: Request, res: Response) => {
     })
     .then(([userInfo, created]) => {
       if (created) {
-        const accessToken = generateAccessToken(userInfo);
-        console.log(accessToken);
-        
+        const accessToken = generateAccessToken(userInfo.get({ plain: true}));
         sendAccessToken(res, accessToken, 201, {
           data: userInfo,
           message: "Singup success",
@@ -174,7 +172,7 @@ export const login = async (req: Request, res: Response) => {
       } else {
         let passwordCheck = await bcrypt.compare(password, userInfo.password);
         if (passwordCheck) {
-          const accessToken = generateAccessToken(userInfo);
+          const accessToken = generateAccessToken(userInfo.get({ plain: true}));
           sendAccessToken(res, accessToken, 200, { data: userInfo, message: "Login success" });
         } else {
           return res.status(400).json({ message: "Wrong password" });

@@ -1,7 +1,8 @@
-const cardController = require("./card");
-const mindmapController = require("./mindmap");
+import * as  cardController from "./card";
+import * as mindmapController from "./mindmap";
+import { Socket } from 'socket.io';
 
-const socketCanvas = async (socket) => {
+export const socketCanvas = async (socket: Socket) => {
     socket.on("initData", async (roomName) => {
         const cardInfo = await cardController.get(roomName);
         const mindmapInfo = await mindmapController.get(roomName);
@@ -19,7 +20,7 @@ const socketCanvas = async (socket) => {
 
     socket.on("deleteCard", async (cardId, roomName) => {
         socket.join(roomName);
-        await cardController.delete(cardId);
+        await cardController.remove(cardId);
         const cardInfo = await cardController.get(roomName);
         socket.emit("deleteCard", cardInfo)
         socket.broadcast.to(roomName).emit("deleteCard", cardInfo);
@@ -36,7 +37,7 @@ const socketCanvas = async (socket) => {
 
     socket.on("deleteMindmap", async (data, roomName) => {
         socket.join(roomName);
-        await mindmapController.delete(data, roomName);
+        await mindmapController.remove(data, roomName);
         const cardInfo = await cardController.get(roomName);
         const mindmapInfo = await mindmapController.get(roomName);
         socket.emit("deleteMindmap", cardInfo, mindmapInfo);
@@ -91,5 +92,3 @@ const socketCanvas = async (socket) => {
         socket.broadcast.to(roomName).emit("resetTimer", data);
     })
 }
-
-module.exports = socketCanvas;
