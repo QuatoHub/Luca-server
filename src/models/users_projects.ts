@@ -25,7 +25,8 @@ export class Users_Projects extends Model<Users_ProjectsAttributes>{
   public readonly updatedAt!: Date;
 
   public static associations: {
-      userHasManyCards: Association<Users_Projects, Users>;
+    // userHasManyUsers_Projects: Association<Users, Users_Projects>;
+    // projectHasManyUsers_Projects: Association<Projects, Users_Projects>;
   };
 }
 
@@ -59,3 +60,22 @@ Users_Projects.init(
       updatedAt : "updatedAt"
   }
 )
+
+// Users.hasMany(Users_Projects, {
+//   sourceKey : "id",
+//   foreignKey : "userId",
+//   as : 'userHasManyUsers_Projects'
+// });
+
+// Projects.hasMany(Users_Projects, {
+//   sourceKey : "id",
+//   foreignKey : "projectId",
+//   as : 'projectHasManyUsers_Projects'
+// });
+
+// Users.belongsTo(Users_Projects, { targetKey: 'id' });
+// Users_Projects.hasOne(Users, { sourceKey: 'id' });
+
+
+// Projects.belongsTo(Users_Projects, { targetKey: 'id' });
+// Users_Projects.hasOne(Projects, { sourceKey: 'id' });
