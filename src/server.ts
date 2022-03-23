@@ -1,6 +1,6 @@
 import server from "./socket"
 import { sequelize } from "./models";
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 
 dotenv.config();
 const port: number = parseInt(process.env.SERVER_PORT);

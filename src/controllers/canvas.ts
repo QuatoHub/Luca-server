@@ -1,6 +1,6 @@
 import * as  cardController from "./card";
 import * as mindmapController from "./mindmap";
-import { Socket } from 'socket.io';
+import { Socket } from "socket.io";
 
 export const socketCanvas = async (socket: Socket) => {
     socket.on("initData", async (roomName) => {

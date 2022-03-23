@@ -24,10 +24,6 @@ interface cardNumber extends Cards{
   numMindmap: number;
 }
 
-interface projectAdmin extends Projects {
-  name: string;
-}
-
 export const get = async (req: Request, res: Response) => {
   try {
     const verifyInfo = isAuthorized(req);
@@ -36,9 +32,14 @@ export const get = async (req: Request, res: Response) => {
     } else if (verifyInfo === "expired") {
       return res.status(401).send({ message: "Expired token" });
     } else {
+      const a = new Users_Projects
+      a.isAccept
       const result = await Projects.findAll({
-        include: [
-          Projects.associations.projectHasManyUsers_Projects
+        include: [{
+            association: Projects.associations.projectHasManyUsers_Projects,
+            attributes: [],
+            required: true
+          }
         ],
         order: [["id", "DESC"]],
         attributes: [
@@ -48,11 +49,10 @@ export const get = async (req: Request, res: Response) => {
           "isTeam",
           "admin",
           "createdAt",
-          "updatedAt",
-          [Sequelize.col("Users_Projects.isAccept"), "isAccept"],
+          [Sequelize.col("projectHasManyUsers_Projects.isAccept"), "isAccept"], 
         ],
         where: {
-          "$Users_Projects.userId$": verifyInfo.id,
+          "$projectHasManyUsers_Projects.userId$": verifyInfo.id,
         },
       });
       const idResult = await Users_Projects.findAll({
@@ -94,22 +94,21 @@ export const get = async (req: Request, res: Response) => {
         order: [["projectId", "DESC"]],
         raw: true,
       });
-      const result5 = await Projects.findAll({
+      const result5 = await Users.findAll({
         include: [
           {
-            model: Users,
+            association: Users.associations.userHasManyProjects,
             required: true,
             attributes: [],
           },
         ],
-        order: [["id", "DESC"]],
-        attributes: ["id", [Sequelize.col("user.name"), "name"]],
+        order: [[Users.associations.userHasManyProjects, "id", "DESC"]],
+        attributes: ["name", [Sequelize.col("userHasManyProjects.id"), "id"]],
         where: {
-          id: projectIdArray,
+          "$userHasManyProjects.id$": projectIdArray,
         },
         raw: true,
-      }) as projectAdmin[];
-
+      });
       const data: projectInfo[] = [];
       result.map((el, i) => {
         const obj: projectInfo = Object.assign(el.get({ plain:true }));
@@ -126,7 +125,6 @@ export const get = async (req: Request, res: Response) => {
         .json({ data: data, message: "Get project list success" });
     }
   } catch (err) {
-    console.log(err)
     res.status(500).json({ message: "Internal server error" });
   }
 }

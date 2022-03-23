@@ -1,12 +1,12 @@
-import { Users } from '../../models/users';
+import { Users } from "../models/users";
 
 const create_table_users = async() => {
     await Users.sync({force : true})
     .then(() => {
-        console.log("Success Create User Table");
+        console.log("Success Create Users Table");
     })
     .catch((err) => {
-        console.log("Error in Create User Table : ", err);
+        console.log("Error in Create Users Table : ", err);
     })
 }
 
